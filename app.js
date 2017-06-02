@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var flash = require('connect-flash');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -47,11 +49,15 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+
 //express validation
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
-      , root    = namespace.shift()
+      , root = namespace.shift()
       , formParam = root;
 
     while(namespace.length) {
