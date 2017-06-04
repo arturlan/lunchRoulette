@@ -22,3 +22,11 @@ body {
 @media only screen and (max-width: 600px) {
 
 }
+
+/*google geolacation*/
+#map {
+  margin-top: 0; 
+  height: 100%;
+  width: 30%;
+  float: right;
+}
