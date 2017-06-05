@@ -21,6 +21,7 @@
     "pg": "^6.2.3",
     "request": "^2.81.0",
     "semantic-ui": "^2.2.10",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "spinkit": "^1.2.5"
   }
 }

@@ -54,7 +54,6 @@ function initMap() {
     zoom: 13
   });
   infoWindow = new google.maps.InfoWindow;
-console.log('init map')
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -69,7 +68,6 @@ console.log('init map')
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
-    console.log('navigator.geoloccation')
   } else {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
@@ -106,17 +104,33 @@ function placeMarker(lat, lng, nameOfVenue) {
 
 // rendering a venue
 function renderVenue(obj) {
+  var icon, star;
+  if (obj.venue.price.message === 'Cheap') {
+    icon = '<i class="dollar icon"></i>';
+  } else if (obj.venue.price.message === 'Moderate') {
+    icon = '<i class="dollar icon"></i><i class="dollar icon"></i>';
+  } else if (obj.venue.price.message === 'Expensive' || obj.venue.price.message === 'Very Expensive') {
+    icon = '<i class="dollar icon"></i><i class="dollar icon"></i><i class="dollar icon"></i>';
+  }
+  if (obj.venue.rating > 0 && obj.venue.rating <= 4) {
+    star = '<i class="thumbs outline up icon"></i>';
+  } else if (obj.venue.rating > 4 && obj.venue.rating <= 7) {
+    star = '<i class="thumbs outline up icon"></i><i class="thumbs outline up icon"></i>';
+  } else if (obj.venue.rating > 7 && obj.venue.rating <= 10) {
+    star = '<i class="thumbs outline up icon"></i><i class="thumbs outline up icon"></i><i class="thumbs outline up icon"></i>';
+  }
   if (emptyNameTag === true) {
     $('.venue').append(`
       <div class="info">
         <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips[0].text}</div><br>
         <div class="nameplace">${obj.venue.name}</div><br>
         <div class="aboutplace">${obj.venue.categories[0].name}</div><br>
-        <div class="aboutplace">price: ${obj.venue.price.message}</div>
-        <div class="aboutplace">rating: ${obj.venue.rating}</div>
+        <div class="aboutplace">${icon} ${obj.venue.price.message}</div>
+        <div class="aboutplace">${star} ${obj.venue.rating}</div>
       </div>
     `);
     emptyNameTag = false;
+    $('.loader').remove();
   } else {
     $('.info').remove();
     $('.venue').append(`
@@ -124,9 +138,11 @@ function renderVenue(obj) {
         <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips[0].text}</div><br>
         <div class="nameplace">${obj.venue.name}</div><br>
         <div class="aboutplace">${obj.venue.categories[0].name}</div><br>
+        <div class="aboutplace">${icon} ${obj.venue.price.message}</div>
+        <div class="aboutplace">${star} ${obj.venue.rating}</div>
       </div>
     `);
   }
 }
 
-setTimeout(APIcall, 5000);
+setTimeout(APIcall, 4000);

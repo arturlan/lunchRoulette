@@ -41,7 +41,7 @@ router.post('/signup', function(req, res, next) {
           .insert(user, 'id')
           .then(ids => {
             id = ids[0];
-            res.redirect(`/users/${id}`);
+            res.redirect(`login`);
           });
       });
     });
@@ -49,20 +49,28 @@ router.post('/signup', function(req, res, next) {
 });
 
 //login
-router.get('/:id', function(req, res, next) {
-  const id = req.params.id;
-  knex('users')
-    .select()
-    .where('id', id)
-    .first()
-    .then(user => {
-      res.render('user', {user: user})
-    })
-});
-
-//login
 router.get('/login', function(req, res, next) {
   res.render('login');
+});
+
+router.post('/login', function(req, res, next) {
+  var email = req.body.email;
+  var password = req.body.password;
+  knex('users')
+    .select()
+    .where('email', email)
+    .first()
+    .then(user => {
+      bcrypt.compare(password, user.password, function(err, res) {
+          console.log(err);
+          console.log(res);
+          console.log(password);
+          console.log(user.password);
+          console.log(user.email);
+      });
+
+      // res.render('user', {user: user})
+    })
 });
 
 module.exports = router;

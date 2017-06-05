@@ -2,6 +2,12 @@ body {
   padding: 0;
   margin: 0;
 }
+.ui.secondary.pointing.menu {
+  background-color: #f46d3b;
+}
+.ui.secondary.pointing.menu a {
+  color: white;
+}
 .ui.form {
   width: 300px;
   height: 300px;
@@ -16,6 +22,91 @@ body {
 #peoplesay {
   color: red;
 }
+i {
+  margin: 0;
+  color: red;
+}
+/*loader*/
+.loader {
+  background-color: #f46d3b;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  position: fixed;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+.spin {
+  position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+}
+.spin h1 {
+  font-size: 50px;
+}
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.spinner > div {
+  background-color: white;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  color: white;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+  color: white;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+  color: white;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+  color: white;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
 /*box*/
 .box {
   display: flex;
@@ -37,17 +128,21 @@ body {
   font-family: 'Anton', sans-serif;
   font-size: 40px;
   margin-top: 20px;
+  padding: 30px;
 }
 
 .box .row.content {
   flex: 1 1 auto;
+  padding: 30px;
 }
 .box .row.content .venue#venue {
   margin: 20px auto;
+  padding: 30px;
 }
 
 .box .row.footer {
   flex: 0 1 100px;
+  padding: 30px;
 }
 
 /*information*/
@@ -62,11 +157,13 @@ body {
   background-color: black;
   color: white;
   line-height: 35px;
-  margin: 20px auto; 
+  margin: 20px auto;
 }
 
 .aboutplace {
-
+  font-size: 20px;
+  line-height: 25px;
+  font-family: 'Anton', sans-serif;
 }
 
 /*google geolacation*/
