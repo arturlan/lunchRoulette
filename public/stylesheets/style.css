@@ -12,20 +12,66 @@ body {
   margin-top: -150px;
   margin-left: -150px;
 }
-/*mobile first*/
-@media only screen and (min-width: 600px) {
-  .ui.sidebar.inverted.vertical.menu {
-    display: block;
-  }
+
+#peoplesay {
+  color: red;
+}
+/*box*/
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 70%;
+  float: left;
 }
 
-@media only screen and (max-width: 600px) {
+.box .row.header {
+  flex: 0 1 auto;
+  /* The above is shorthand for:
+  flex-grow: 0,
+  flex-shrink: 1,
+  flex-basis: auto
+  */
+}
+.box .row.header h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: 40px;
+  margin-top: 20px;
+}
+
+.box .row.content {
+  flex: 1 1 auto;
+}
+.box .row.content .venue#venue {
+  margin: 20px auto;
+}
+
+.box .row.footer {
+  flex: 0 1 100px;
+}
+
+/*information*/
+.headline {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 30px;
+  line-height: 35px;
+}
+.nameplace {
+  font-family: 'Anton', sans-serif;
+  font-size: 40px;
+  background-color: black;
+  color: white;
+  line-height: 35px;
+  margin: 20px auto; 
+}
+
+.aboutplace {
 
 }
 
 /*google geolacation*/
 #map {
-  margin-top: 0; 
+  margin-top: 0;
   height: 100%;
   width: 30%;
   float: right;

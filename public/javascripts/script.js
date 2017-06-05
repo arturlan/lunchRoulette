@@ -1,6 +1,8 @@
 // variables
 var CLIENT_ID = 'QGAQKTTZ2RIZAPVINPVPYZUQC0NIQG03QBTVRQ2GBCFKG021';
 var CLIENT_SECRET = '42TRJYPM4LYMOZLVM3CCIA23AJWQK25FAG0DE45XUUP3A2D3';
+var emptyNameTag = true;
+var pos;
 
 $( document ).ready(() => {
   setActive();
@@ -9,6 +11,7 @@ $( document ).ready(() => {
   })
 });
 
+// menu
 function setActive() {
   $('.ui.secondary.pointing.menu a').on('mouseenter', () => {
     $(this).closest('a').addClass('active item');
@@ -19,7 +22,7 @@ function setActive() {
 }
 
 function APIcall() {
-  var end = `${pos.lat.toFixed(2)},${pos.lng.toFixed(2)}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20170401&radius=500&section=food&openNow=1`;
+  var end = `${pos.lat.toFixed(2)},${pos.lng.toFixed(2)}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20170401&radius=1000&section=food&openNow=1`;
   var url = `https://api.foursquare.com/v2/venues/explore?limit=50&ll=${end}`;
   $.ajax({
     url: url,
@@ -32,22 +35,26 @@ function APIcall() {
         var randomVenue = Math.floor(Math.random() * 50);
         var lat = data.response.groups[0].items[randomVenue].venue.location.lat;
         var lng = data.response.groups[0].items[randomVenue].venue.location.lng;
-        renderVenue(data.response.groups[0].items[randomVenue].venue)
-        placeMarker(lat, lng);
+        var nameOfVenue = data.response.groups[0].items[randomVenue].venue.name;
+        renderVenue(data.response.groups[0].items[randomVenue]);
+        placeMarker(lat, lng, nameOfVenue);
     }
   });
 }
 
+
+
+
 //google geolocation
-var map, infoWindow, pos;
+var map, infoWindow;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 12
+    center: {lat: 40.397, lng: -70.644},
+    zoom: 13
   });
   infoWindow = new google.maps.InfoWindow;
-
+console.log('init map')
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -56,12 +63,13 @@ function initMap() {
         lng: position.coords.longitude
       };
       infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
+      infoWindow.setContent('You are here!');
       infoWindow.open(map);
       map.setCenter(pos);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
+    console.log('navigator.geoloccation')
   } else {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
@@ -76,11 +84,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 }
 
-function renderVenue(obj) {
-  $('.venue').append(`<h1 class="name">${obj.name}</h1>`);
-}
-
-function placeMarker(lat, lng) {
+function placeMarker(lat, lng, nameOfVenue) {
   var myLatLng = {lat: lat, lng: lng};
 
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -91,7 +95,38 @@ function placeMarker(lat, lng) {
   var marker = new google.maps.Marker({
     position: myLatLng,
     map: map,
-    title: 'Hello World!'
+    title: nameOfVenue
   });
-
 }
+
+
+
+
+
+
+// rendering a venue
+function renderVenue(obj) {
+  if (emptyNameTag === true) {
+    $('.venue').append(`
+      <div class="info">
+        <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips[0].text}</div><br>
+        <div class="nameplace">${obj.venue.name}</div><br>
+        <div class="aboutplace">${obj.venue.categories[0].name}</div><br>
+        <div class="aboutplace">price: ${obj.venue.price.message}</div>
+        <div class="aboutplace">rating: ${obj.venue.rating}</div>
+      </div>
+    `);
+    emptyNameTag = false;
+  } else {
+    $('.info').remove();
+    $('.venue').append(`
+      <div class="info">
+        <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips[0].text}</div><br>
+        <div class="nameplace">${obj.venue.name}</div><br>
+        <div class="aboutplace">${obj.venue.categories[0].name}</div><br>
+      </div>
+    `);
+  }
+}
+
+setTimeout(APIcall, 5000);
