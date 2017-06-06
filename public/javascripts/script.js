@@ -145,4 +145,14 @@ function renderVenue(obj) {
   }
 }
 
-setTimeout(APIcall, 4000);
+function checkingErrorPos() {
+  console.log(pos);
+  if (pos === 'undefined') {
+    $('.loader').remove();
+    console.log('please allow your browser detect your location');
+  }
+  return true;
+}
+
+// setTimeout(APIcall, 4000);
+setTimeout(checkingErrorPos, 6000);
