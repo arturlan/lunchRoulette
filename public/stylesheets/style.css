@@ -37,6 +37,7 @@ i {
   top: 0;
   left: 0;
   z-index: 10;
+  display: none;
 }
 .spin {
   position: fixed; /* or absolute */
