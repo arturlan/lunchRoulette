@@ -146,13 +146,10 @@ function renderVenue(obj) {
 }
 
 function checkingErrorPos() {
-  console.log(pos);
-  if (pos === 'undefined') {
-    $('.loader').remove();
-    console.log('please allow your browser detect your location');
+  if (pos === undefined) {
+    $('.error').css('display', 'table');
   }
-  return true;
 }
 
-// setTimeout(APIcall, 4000);
+setTimeout(APIcall, 4000);
 setTimeout(checkingErrorPos, 6000);
