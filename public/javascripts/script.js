@@ -32,18 +32,34 @@ function APIcall() {
       console.log(error);
     },
     success: (data) => {
-        var randomVenue = Math.floor(Math.random() * 50);
-        var lat = data.response.groups[0].items[randomVenue].venue.location.lat;
-        var lng = data.response.groups[0].items[randomVenue].venue.location.lng;
-        var nameOfVenue = data.response.groups[0].items[randomVenue].venue.name;
-        renderVenue(data.response.groups[0].items[randomVenue]);
-        placeMarker(lat, lng, nameOfVenue);
+      var randomNumber = Math.floor(Math.random() * 10);
+      console.log(randomNumber);
+      var randomVenue = data.response.groups[0].items[randomNumber].venue.id;
+      APIcallVenue(randomVenue);
     }
   });
 }
 
+function APIcallVenue(venue) {
+  var end = `${pos.lat.toFixed(2)},${pos.lng.toFixed(2)}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20170401&radius=1000&section=food&openNow=1`;
+  var url = `https://api.foursquare.com/v2/venues/${venue}?limit=50&ll=${end}`;
+  $.ajax({
+    url: url,
+    type: 'GET',
+    dataType:'json',
+    error: (request,error) => {
+      console.log(error);
+    },
+    success: (data) => {
+      var lat = data.response.venue.location.lat;
+      var lng = data.response.venue.location.lng;
+      var nameOfVenue = data.response.venue.name;
+      renderVenue(data.response.venue);
+      placeMarker(lat, lng, nameOfVenue);
+    }
+  });
 
-
+}
 
 //google geolocation
 var map, infoWindow;
@@ -104,29 +120,30 @@ function placeMarker(lat, lng, nameOfVenue) {
 
 // rendering a venue
 function renderVenue(obj) {
+  console.log(obj.tips.groups[0].items[0].text);
   var icon, star;
-  if (obj.venue.price.message === 'Cheap') {
+  if (obj.price.tier === '1') {
     icon = '<i class="dollar icon"></i>';
-  } else if (obj.venue.price.message === 'Moderate') {
+  } else if (obj.price.tier === '2') {
     icon = '<i class="dollar icon"></i><i class="dollar icon"></i>';
-  } else if (obj.venue.price.message === 'Expensive' || obj.venue.price.message === 'Very Expensive') {
+  } else if (obj.price.tier === '3' || obj.price.tier === '4') {
     icon = '<i class="dollar icon"></i><i class="dollar icon"></i><i class="dollar icon"></i>';
   }
-  if (obj.venue.rating > 0 && obj.venue.rating <= 4) {
+  if (obj.rating > 0 && obj.rating <= 4) {
     star = '<i class="thumbs outline up icon"></i>';
-  } else if (obj.venue.rating > 4 && obj.venue.rating <= 7) {
+  } else if (obj.rating > 4 && obj.rating <= 7) {
     star = '<i class="thumbs outline up icon"></i><i class="thumbs outline up icon"></i>';
-  } else if (obj.venue.rating > 7 && obj.venue.rating <= 10) {
+  } else if (obj.rating > 7 && obj.rating <= 10) {
     star = '<i class="thumbs outline up icon"></i><i class="thumbs outline up icon"></i><i class="thumbs outline up icon"></i>';
   }
   if (emptyNameTag === true) {
     $('.venue').append(`
       <div class="info">
-        <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips[0].text}</div><br>
-        <div class="nameplace">${obj.venue.name}</div><br>
-        <div class="aboutplace">${obj.venue.categories[0].name}</div><br>
-        <div class="aboutplace">${icon} ${obj.venue.price.message}</div>
-        <div class="aboutplace">${star} ${obj.venue.rating}</div>
+        <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips.groups[0].items[0].text}</div><br>
+        <div class="nameplace">${obj.name}</div><br>
+        <div class="aboutplace">${obj.categories[0].name}</div><br>
+        <div class="aboutplace">Price: ${obj.price.message}</div>
+        <div class="aboutplace">${star} ${obj.rating}</div>
       </div>
     `);
     emptyNameTag = false;
@@ -135,11 +152,11 @@ function renderVenue(obj) {
     $('.info').remove();
     $('.venue').append(`
       <div class="info">
-        <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips[0].text}</div><br>
-        <div class="nameplace">${obj.venue.name}</div><br>
-        <div class="aboutplace">${obj.venue.categories[0].name}</div><br>
-        <div class="aboutplace">${icon} ${obj.venue.price.message}</div>
-        <div class="aboutplace">${star} ${obj.venue.rating}</div>
+        <div class="headline"><spin id="peoplesay">People say:</spin> ${obj.tips.groups[0].items[0].text}</div><br>
+        <div class="nameplace">${obj.name}</div><br>
+        <div class="aboutplace">${obj.categories[0].name}</div><br>
+        <div class="aboutplace">Price: ${obj.price.message}</div>
+        <div class="aboutplace">${star} ${obj.rating}</div>
       </div>
     `);
   }
